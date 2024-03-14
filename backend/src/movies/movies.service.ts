@@ -7,7 +7,8 @@ export class MoviesService {
 
   public async getMovies(page=1) {
     const moviesLength = await this.prisma.movie.count()
-    const maxPage = Math.ceil(moviesLength / 20)
+    const moviesPerPage = 20
+    const maxPage = Math.ceil(moviesLength / moviesPerPage)
     if (page > maxPage) {
       throw new BadRequestException(`Page must be less or equal to ${maxPage}`)
     } else if (page <= 0) {
