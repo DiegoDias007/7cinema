@@ -10,14 +10,22 @@ export class MoviesService {
     const moviesPerPage = 20
     const maxPage = Math.ceil(moviesLength / moviesPerPage)
     if (page > maxPage) {
-      throw new BadRequestException(`Page must be less or equal to ${maxPage}`)
+      throw new BadRequestException(`Page must be less or equal to ${maxPage}.`)
     } else if (page <= 0) {
-      throw new BadRequestException("Page must be a valid number greater than 0")
+      throw new BadRequestException("Page must be a valid number greater than 0.")
     }
     const movies = await this.prisma.movie.findMany({
       skip: (page - 1) * 20,
       take: page * 20
     })
     return movies
+  }
+
+  public async getMovieById(id: string) {
+    const movie = await this.prisma.movie.findUnique({
+      where: { id }
+    })
+    if (!movie) throw new BadRequestException("Movie not found.")
+    return movie
   }
 }
