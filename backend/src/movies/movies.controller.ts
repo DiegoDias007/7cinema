@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
@@ -11,7 +11,7 @@ export class MoviesController {
   }
 
   @Get(":id")
-  async getMovieById(@Param("id") id: string) {
+  async getMovieById(@Param("id", ParseUUIDPipe) id: string) {
     return this.moviesService.getMovieById(id)
   }
 }
