@@ -1,3 +1,6 @@
-export type getRatingDto = {
+import { IsUUID } from "class-validator";
+
+export class GetRatingDto {
+  @IsUUID()
   movieId: string;
 }

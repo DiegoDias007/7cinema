@@ -10,18 +10,18 @@ import {
   Req,
 } from '@nestjs/common';
 import { RatingsService } from './ratings.service';
-import { newRatingDto } from './dto/newRating.dto';
+import { NewRatingDto } from './dto/newRating.dto';
 import { Request } from 'express';
-import { updateRatingDto } from './dto/updateRating.dto';
-import { getRatingDto } from './dto/getRatingDto';
-import { deleteRatingDto } from './dto/deleteRating.dto';
+import { UpdateRatingDto } from './dto/updateRating.dto';
+import { GetRatingDto } from './dto/getRatingDto';
+import { DeleteRatingDto } from './dto/deleteRating.dto';
 
 @Controller('ratings')
 export class RatingsController {
   constructor(private readonly ratingsService: RatingsService) {}
 
   @Post('')
-  async newRating(@Req() request: Request, @Body() newRatingDto: newRatingDto) {
+  async newRating(@Req() request: Request, @Body() newRatingDto: NewRatingDto) {
     const { rating, movieId } = newRatingDto;
     const { sub: userId } = request['user'];
     return this.ratingsService.newRating(rating, movieId, userId);
@@ -30,7 +30,7 @@ export class RatingsController {
   @Get(':ratingId')
   async getRating(
     @Param('ratingId', ParseUUIDPipe) ratingId: string,
-    @Body() getRatingDto: getRatingDto,
+    @Body() getRatingDto: GetRatingDto,
     @Req() request: Request,
   ) {
     const { movieId } = getRatingDto;
@@ -41,7 +41,7 @@ export class RatingsController {
   @Patch(':ratingId')
   async updateRating(
     @Param('ratingId', ParseUUIDPipe) ratingId: string,
-    @Body() updateRatingDto: updateRatingDto,
+    @Body() updateRatingDto: UpdateRatingDto,
     @Req() request: Request,
   ) {
     const { rating, movieId } = updateRatingDto;
@@ -52,7 +52,7 @@ export class RatingsController {
   @Delete(':ratingId')
   async deleteRating(
     @Param('ratingId', ParseUUIDPipe) ratingId: string,
-    @Body() deleteRatingDto: deleteRatingDto,
+    @Body() deleteRatingDto: DeleteRatingDto,
     @Req() request: Request,
   ) {
     const { movieId } = deleteRatingDto;
