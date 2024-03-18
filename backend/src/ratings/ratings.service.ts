@@ -48,10 +48,41 @@ export class RatingsService {
       ratingSum += rating.rating
     }
     const avgRating = ratingSum / ratings.length
-    return { data: avgRating }
+    return avgRating
   }
 
-  async getRating(movieId: string, userId: string) {
+  async getAvgRatings(movieIds: string[]) {
+    const ratings = await this.prisma.rating.findMany({
+      where: { movieId: { in: movieIds } }
+    });
+  
+    // Create a map to store ratings for each movie
+    const ratingsMap = new Map<string, number[]>();
+  
+    // Populate the ratings map with ratings for each movie
+    ratings.forEach(rating => {
+      if (ratingsMap.has(rating.movieId)) {
+        ratingsMap.get(rating.movieId).push(rating.rating);
+      } else {
+        ratingsMap.set(rating.movieId, [rating.rating]);
+      }
+    });
+  
+    // Calculate the average rating for each movie
+    const avgRatings = movieIds.map(movieId => {
+      const values = ratingsMap.get(movieId);
+      if (values && values.length > 0) {
+        const avgRating = values.reduce((sum, value) => sum + value, 0) / values.length;
+        return avgRating;
+      } else {
+        return null;
+      }
+    });
+  
+    return avgRatings;
+  }
+      
+  async getUserRating(movieId: string, userId: string) {
     const isInputValid = this.isInputValid(movieId, userId)
     if (!isInputValid) {
       throw new BadRequestException("Invalid request.")
@@ -65,7 +96,7 @@ export class RatingsService {
     if (!rating) {
       throw new BadRequestException("No rating found.")
     }
-    return { data: rating }
+    return rating
   }
 
   async updateRating(ratingId: string, rating: number, movieId: string, userId: string) {

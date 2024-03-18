@@ -31,7 +31,7 @@ export class RatingsController {
   async getRating(@Body() getRatingDto: GetRatingDto, @Req() request: Request) {
     const { movieId } = getRatingDto;
     const { sub: userId } = request['user'];
-    return this.ratingsService.getRating(userId, movieId);
+    return this.ratingsService.getUserRating(userId, movieId);
   }
 
   @Patch(':ratingId')
