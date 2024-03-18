@@ -13,7 +13,7 @@ import { RatingsService } from './ratings.service';
 import { newRatingDto } from './dto/newRating.dto';
 import { Request } from 'express';
 import { updateRatingDto } from './dto/updateRating.dto';
-import { getAvgRatingDto } from './dto/getAvgRating.dto';
+import { getRatingDto } from './dto/getRatingDto';
 import { deleteRatingDto } from './dto/deleteRating.dto';
 
 @Controller('ratings')
@@ -27,10 +27,15 @@ export class RatingsController {
     return this.ratingsService.newRating(rating, movieId, userId);
   }
 
-  @Get('')
-  async getAvgRating(@Body() getAvgRatingDto: getAvgRatingDto) {
-    const { movieId } = getAvgRatingDto
-    return this.ratingsService.getAvgRating(movieId)
+  @Get(':ratingId')
+  async getRating(
+    @Param('ratingId', ParseUUIDPipe) ratingId: string,
+    @Body() getRatingDto: getRatingDto,
+    @Req() request: Request,
+  ) {
+    const { movieId } = getRatingDto;
+    const { sub: userId } = request['user'];
+    return this.ratingsService.getRating(ratingId, userId, movieId);
   }
 
   @Patch(':ratingId')
@@ -44,7 +49,7 @@ export class RatingsController {
     return this.ratingsService.updateRating(ratingId, rating, movieId, userId);
   }
 
-  @Delete(":ratingId")
+  @Delete(':ratingId')
   async deleteRating(
     @Param('ratingId', ParseUUIDPipe) ratingId: string,
     @Body() deleteRatingDto: deleteRatingDto,

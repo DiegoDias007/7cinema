@@ -50,6 +50,24 @@ export class RatingsService {
     return { data: avgRating }
   }
 
+  async getRating(ratingId: string, movieId: string, userId: string) {
+    const isInputValid = this.isInputValid(movieId, userId)
+    if (!isInputValid) {
+      throw new BadRequestException("Invalid request.")
+    }
+    const rating = this.prisma.rating.findUnique({
+      where: {
+        id: ratingId,
+        movieId,
+        userId
+      }
+    })
+    if (!rating) {
+      throw new BadRequestException("No rating found.")
+    }
+    return { data: rating }
+  }
+
   async updateRating(ratingId: string, rating: number, movieId: string, userId: string) {
     const isInputValid = this.isInputValid(movieId, userId)
     if (!isInputValid) {
