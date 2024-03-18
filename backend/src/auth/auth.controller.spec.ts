@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { signInDto } from './dto/signIn.dto';
-import { signUpDto } from './dto/signUp.dto';
+import { SignInDto } from './dto/signIn.dto';
+import { SignUpDto } from './dto/signUp.dto';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -35,7 +35,7 @@ describe('AuthController', () => {
 
   describe('signIn', () => {
     it('should call AuthService.signIn with correct parameters', async () => {
-      const dto: signInDto = { email: 'test@example.com', password: 'password123' };
+      const dto: SignInDto = { email: 'test@example.com', password: 'password123' };
       await controller.signIn(dto);
       expect(authService.signIn).toHaveBeenCalledWith(dto.email, dto.password);
     });
@@ -43,7 +43,7 @@ describe('AuthController', () => {
 
   describe('signUp', () => {
     it('should call AuthService.signUp with correct parameters', async () => {
-      const dto: signUpDto = { email: 'test@example.com', password: 'password123', firstName: 'Test', lastName: 'User' };
+      const dto: SignUpDto = { email: 'test@example.com', password: 'password123', firstName: 'Test', lastName: 'User' };
       await controller.signUp(dto);
       expect(authService.signUp).toHaveBeenCalledWith(dto);
     });

@@ -28,8 +28,8 @@ export class ReviewsController {
   }
 
   @Get('')
-  async getReviews(@Body() getAvgReviewDto: GetReviewsDto) {
-    const { movieId } = getAvgReviewDto
+  async getReviews(@Body() getReviewsDto: GetReviewsDto) {
+    const { movieId } = getReviewsDto
     return this.reviewsService.getAllReviews(movieId)
   }
 

@@ -17,7 +17,8 @@ export class RatingsService {
 
     const userHasRating = await this.prisma.rating.findMany({
       where: {
-        userId
+        userId,
+        movieId
       }
     })
     if (userHasRating) {
@@ -50,14 +51,13 @@ export class RatingsService {
     return { data: avgRating }
   }
 
-  async getRating(ratingId: string, movieId: string, userId: string) {
+  async getRating(movieId: string, userId: string) {
     const isInputValid = this.isInputValid(movieId, userId)
     if (!isInputValid) {
       throw new BadRequestException("Invalid request.")
     }
-    const rating = this.prisma.rating.findUnique({
+    const rating = this.prisma.rating.findMany({
       where: {
-        id: ratingId,
         movieId,
         userId
       }

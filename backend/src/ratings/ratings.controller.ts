@@ -27,15 +27,11 @@ export class RatingsController {
     return this.ratingsService.newRating(rating, movieId, userId);
   }
 
-  @Get(':ratingId')
-  async getRating(
-    @Param('ratingId', ParseUUIDPipe) ratingId: string,
-    @Body() getRatingDto: GetRatingDto,
-    @Req() request: Request,
-  ) {
+  @Get('')
+  async getRating(@Body() getRatingDto: GetRatingDto, @Req() request: Request) {
     const { movieId } = getRatingDto;
     const { sub: userId } = request['user'];
-    return this.ratingsService.getRating(ratingId, userId, movieId);
+    return this.ratingsService.getRating(userId, movieId);
   }
 
   @Patch(':ratingId')
